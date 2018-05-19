@@ -1,0 +1,33 @@
+\chapter{维护设计}
+可能的内容包括数据库的日常备份、压缩、维护等。
+
+\subsection{备份}
+
+对以下数据库进行完全备份:
+\begin{itemize}
+	\item 用户信息数据表Users
+	\item 用户评论数据表Marks
+	\item 航班数据表Flights
+	\item 火车票数据表Trains
+	\item 酒店数据表Hotels
+	\item 景点数据表Attractions
+	\item 用户预订数据表Reservations
+	\item 用户优惠券数据表MyCoupons
+\end{itemize}
+
+
+同时,对收到的以下请求和结果进行备份:
+\begin{itemize}
+	\item 预订操作
+	\item 优惠券领取操作
+	\item 用户信息更改操作
+\end{itemize}
+
+\subsection{维护}
+
+每天固定的时间段内进行以下项目的检验:
+\begin{itemize}
+	\item 服务器端网络的可达性
+	\item 用户登录连接的速度
+	\item 数据库内容的正确性(检验和)
+\end{itemize}

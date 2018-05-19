@@ -1,0 +1,128 @@
+\chapter{数据结构设计}
+\section{逻辑结构设计}
+\subsection{用户管理系统数据结构设计}
+讲述本系统内需要什么数据结构。这指的是程序运行过程中维护的数据结构。只是举个例子，此处应和3.3一致。
+
+\subsection{客户端数据结构}
+\indent    1.火车票模块 \\
+\indent    (a)维护的数据结构：火车班次(String)，座位类型(String)，价格(Integer)，座位数(Integer)，出发时间和到达时间(DateTime)，出发城市和目的城市(String)，数据缓冲区，通信计时，校验串。 \\
+\indent    (b)说明：该模块的请求发送和接收响应往往都是以表单的形式，根据用户实际在查看和预订火车票的需求维护以上所述的数据类型，并且为了维护数据结构，将其设为一个表单类(继承来FLaskForm)。当大量数据就进行通信传输时，需要缓冲区类型来存储图片等等数据，据结构通信计时器查看是否发生请求超时。
+\\
+
+\indent    2.航班模块 \\
+\indent    (a)维护的数据结构：航班号(String)，舱位(String)，价格(Integer)，座位数(Integer)，起飞时间和到达时间(DateTime)，出发城市和目的城市(String)，数据缓冲区，通信计时，校验串。\\
+\indent    (b)说明：该模块的请求发送和接收响应往往都是以表单的形式，根据用户实际在查看和预订航班的需求维护以上所述的数据类型，并且为了维护数据结构，将其设为一个表单类(继承来FLaskForm)。当大量数据就进行通信传输时，需要缓冲区类型来存储图片等等数据，据结构通信计时器查看是否发生请求超时。
+\\ \\
+
+\indent    3.登录注册模块 \\
+\indent    (a)维护的数据结构：用户名(String)，密码(String)，姓名(String)，年龄(Integer)，性别(String)，手机号(String)，地址(String)，通信计时，校验串。\\
+\indent    (b)说明：用户在登录时需要用户名(String)和密码(Stirng)，注册时需要提交的表单包含以上所有的数据类型。 
+\\
+
+\indent    4.景点模块 \\
+\indent    (a)维护的数据结构：景点名(String)，位置(String)，景点特色(String)，门票类型(String)，价格(Integer)，使用期限(DateTime)，通信计时，校验串，数据缓冲区。\\
+\indent    (b)用户在预订门票时需要浏览一个景点的详细信息，所以景点的位置和景点的特色在前端用String数据类型表示维护，具体的其他信息价格为整型、使用期间为DateTime类型。
+\\
+
+\indent    5.酒店模块 \\
+\indent    (a)维护的数据结构：酒店名(String)，位置(String)，房间类型(String)，价格(String)，房间数(Integer)，使用期限(DateTime)，通信计时，校验串，数据缓冲区。\\
+\indent    (b)将以上数据类型集合封装为一个表单类，具体如模块所述。
+\\
+
+\indent    6.优惠券模块 \\
+\indent    (a)维护的数据结构：折扣商家(String)，类型(String)，折扣(Integer)，优惠券数量(String)，使用期限(DateTime)，通信计时，校验串，数据缓冲区。\\
+\indent    (b)将以上数据类型集合封装为一个表单类，具体如模块所述。
+\\
+
+\indent    7.活动推送模块 \\
+\indent    (a)维护的数据结构：活动名(String)，内容信息(String)，活动价格(Integer)，结束时间(DateTime)，通信计时，校验串，数据缓冲区。 \\
+\indent    (b)说明：活动推送内容展现在网页端的首页，在前端需要维护表述一个活动的数据类型如上。
+\\ \\
+
+\indent    8.客服模块 \\
+\indent    (a)维护的数据结构：请求/接收消息(Message)，数据缓冲区，通信计时，校验串 \\
+\indent    (b)说明：客服模块中用户发送和接收消息的过程为一个即时通信过程，将用户发送/接收的消息封装后进行传输，并且需要动态的缓冲区存储可能到达的数据包，通信计时器和校验串为了保证通信的正常进行和数据包的完整性。
+\\
+
+\subsection{服务器端数据结构}
+
+
+(1)数据库操作:
+\begin{itemize}
+    \item 操作表对象;
+    \item 操作类型
+    \item 操作值
+    \item 操作语句
+    \item 发生时间
+    \item 是否成功
+\end{itemize}
+
+
+(2)表对象信息:
+\begin{itemize}
+    \item 表名
+    \item 表记录数
+    \item 表最后一次操作
+    \item 表可用性
+\end{itemize}
+
+
+(3)服务器接收请求:
+\begin{itemize}
+    \item 请求来源
+    \item 目标URL
+    \item 请求类型
+    \item 请求资源
+    \item 请求源代码
+    \item 发生时间
+    \item 是否已回应
+\end{itemize}
+
+
+(4)服务器回应:
+\begin{itemize}
+    \item 回应目标URL
+    \item 回应来源
+    \item 回应信息体
+    \item 回应对应请求
+    \item 回应时间
+    \item 是否已送达
+\end{itemize}
+
+
+(5)推荐模块:
+\begin{itemize}
+    \item 用户名
+    \item 预订列表
+    \item 活动列表
+    \item 相似度
+\end{itemize}
+
+
+\section{物理结构设计}
+无
+
+% \newpage
+
+% \section{数据结构与程序模块的关系}
+% [此处指的是不同的数据结构分配到哪些模块去实现。可按不同的端拆分此表]
+% \begin{table}[htbp]
+% \centering
+% \caption{数据结构与程序代码的关系表} \label{tab:datastructure-module}
+% \begin{tabular}{|c|c|c|c|}
+%     \hline
+%     · & 模块1 & 模块2 & 模块3 \\
+%     \hline
+%     结构1 & · & Y & · \\
+%     \hline
+%     结构2 & · & Y & · \\
+%     \hline
+%     结构3 & · & Y & · \\
+%     \hline
+%     结构4 & Y & · & · \\
+%     \hline
+%     结构5 & · & · & Y \\
+%     \hline
+% \end{tabular}
+% \note{各项数据结构的实现与各个程序模块的分配关系}
+% \end{table}
