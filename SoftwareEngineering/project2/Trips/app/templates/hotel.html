@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block container %}
+<h3>酒店预订中心</h3><hr>
+<div>
+  <form class="form-inline" method="get">
+      {% if userId == 1 %}
+        <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('hotel_edit',id=0) }}>新建</a>
+      {% endif %}
+      位置：
+      <input class="form-control" name="location" type="text" value="{{loc}}">
+      <input class="btn btn-default" type="submit" value="查询">
+  </form>
+</div><br>
+
+{% for h in hotels %}
+    <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+
+            <img src="static/img/hotel{{ h.id }}.png" alt="img">
+            <div class="caption">
+                <h3>{{ h.hotelName }}</h3>
+                <p>{{ h.hotelLoca }}</p>
+                <p>{{ h.roomType }}({{ h.avaiNum }}/{{ h.roomNum }})</p>
+                {% if h.id in resvNums %}
+                    <h1 style="color: coral;display: inline;padding-right: 5px">￥{{ h.price }}</h1>
+                {% else %}
+                    <h1 style="color: coral;display: inline;padding-right: 30px">￥{{ h.price }}</h1>
+                {% endif %}
+                <p style="display: inline;">
+                {% if userId == 0 %}
+                    <a class="btn btn-primary btn-sm" type="button" disabled="disabled">预订</a>
+                {% endif %}
+                {% if userId > 1 %}
+                    {% if h.id in resvNums %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('reservation_add',type=2,id=h.id,add=0) }}>预订({{ resvNums[h.id] }})</a>
+                        <a class="btn btn-default btn-sm" type="button" href={{ url_for('reservation_add',type=2,id=h.id,add=2) }}>取消</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('reservation_add',type=2,id=h.id,add=0) }}>预订</a>
+                    {% endif %}
+                {% endif %}
+                {% if userId == 1 %}
+                    <a class="btn btn-primary btn-sm" type="button" href={{ url_for('hotel_edit',id=h.id) }}>编辑</a>
+                    <a class="btn btn-default btn-sm" type="button" href={{ url_for('hotel_delete',id=h.id) }}>删除</a>
+                {% endif %}
+
+                </p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

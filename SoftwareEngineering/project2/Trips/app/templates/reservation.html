@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block container %}
+{% if userId == 1 %}
+    <h3>客户预订中心</h3><hr>
+    <h4>所有预订航班/火车票</h4><hr>
+{% endif %}
+{% if userId > 1 %}
+    <h3>个人预订中心</h3><hr>
+    <h4>我的预订航班/火车票</h4><hr>
+{% endif %}
+<table class="table" style="margin-top:10px">
+<tr>
+    <th>预定号</th>
+    {% if userId == 1 %}
+        <th>客户姓名</th>
+    {% endif %}
+    <th>航班/列车次</th>
+    <th>出发地->目的地</th>
+    <th>时间</th>
+    <th>预订类型</th>
+    <th>价格</th>
+    <th>数量</th>
+</tr>
+{% for r in reservations %}
+<tr>
+    {% if r.resvType == 'flight' or r.resvType == 'train' %}
+        <td>{{ r.resvKey }}</td>
+        {% if userId == 1 %}
+            <td>{{ r.customer.custName }}</td>
+        {% endif %}
+        <td>{{ r.name() }}</td>
+        <td>{{ r.location() }}</td>
+        <td>{{ r.time() }}</td>
+        <td>{{ r.type() }}</td>
+        <td>{{ r.price() }}</td>
+        <td>{{ r.resvNum }}</td>
+        <td>
+            <a class="btn btn-default btn-sm" type="button" href={{ url_for('reservation_delete',id=r.resvKey) }}>删除</a>
+        </td>
+    {% endif %}
+</tr>
+{% endfor %}
+</table>
+    <br><hr><br>
+{% if userId == 1 %}
+    <h4>所有预订酒店/景点</h4><hr>
+{% endif %}
+{% if userId > 1 %}
+    <h4>我的预订酒店/景点</h4><hr>
+{% endif %}
+
+<table class="table" style="margin-top:10px">
+<tr>
+    <th>预定号</th>
+    {% if userId == 1 %}
+        <th>客户姓名</th>
+    {% endif %}
+    <th>酒店/景点名称</th>
+    <th>位置</th>
+    <th>时间</th>
+    <th>预订类型</th>
+    <th>价格</th>
+    <th>数量</th>
+    <th></th>
+</tr>
+{% for r in reservations %}
+<tr>
+    {% if r.resvType == 'hotel' or r.resvType == 'attraction' %}
+        <td>{{ r.resvKey }}</td>
+        {% if userId == 1 %}
+            <td>{{ r.customer.custName }}</td>
+        {% endif %}
+        <td>{{ r.name() }}</td>
+        <td>{{ r.location() }}</td>
+        <td>{{ r.time() }}</td>
+        <td>{{ r.type() }}</td>
+        <td>{{ r.price() }}</td>
+        <td>{{ r.resvNum }}</td>
+        <td>
+            <a class="btn btn-default btn-sm" type="button" href={{ url_for('reservation_delete',id=r.resvKey) }}>删除</a>
+        </td>
+    {% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

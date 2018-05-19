@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block container %}
+<h3>优惠券领取中心</h3><hr>
+<div>
+  <form class="form-inline" method="get">
+      {% if userId == 1 %}
+        <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('coupon_edit',id=0) }}>新建</a>
+      {% endif %}
+      搜索优惠商家
+      <input class="form-control" name="name" type="text" value="{{name}}">
+      <input class="btn btn-default" type="submit" value="查询">
+  </form>
+</div>
+    <br>
+
+{% for off in coupons %}
+    <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+
+            <img src="static/img//coupon5.jpg" alt="img">
+            <div class="caption">
+                <h3>{{ off.offName }}</h3>
+                <p>{{ off.offType }}——{{ off.offRate }}折优惠！</p>
+                <p>已抢{{ off.avaiNum }}/{{ off.offNum }}</p>
+                <p>有效日期在{{ off.endTime }}前</p>
+                <p>
+                    {% if userId == 0 or off.avaiNum == 0 %}
+                        <a class="btn btn-primary btn-sm" type="button" disabled="disabled">领取</a>
+                    {% endif %}
+                    {% if userId > 1 %}
+                        {% if off.avaiNum > 0 and off.id not in offIds %}
+                            <a class="btn btn-default btn-sm" type="button" href={{ url_for('coupon_add', id=off.id) }}>领取</a>
+                        {% endif %}
+                        {% if off.id in offIds %}
+                            <a class="btn btn-primary btn-sm" type="button" disabled="disabled">已领取</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if userId == 1 %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('coupon_edit',id=off.id) }}>编辑</a>
+                        <a class="btn btn-default btn-sm" type="button" href={{ url_for('coupon_delete',id=off.id) }}>删除</a>
+                    {% endif %}
+
+                </p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{#</table>#}
+{% endblock %}

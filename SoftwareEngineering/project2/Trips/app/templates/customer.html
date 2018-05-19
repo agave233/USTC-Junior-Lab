@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+{% if userId == 1 %}
+<h3>客户信息管理中心</h3><hr>
+<div>
+  <form class="form-inline" method="get">
+      姓名：
+      <input class="form-control" name="sname" type="text" value="{{sname}}">
+      <input class="btn btn-default" type="submit" value="查询">
+  </form>
+</div>
+<table class="table" style="margin-top:10px">
+<tr>
+    <th>客户编号</th>
+    <th>姓名</th>
+    <th>年龄</th>
+    <th>性别</th>
+    <th>手机号</th>
+    <th>预订总数</th>
+    <th>预订花费</th>
+</tr>
+{% for c in customers %}
+<tr>
+    {% if c.id != 1 %}
+        <td>{{ c.id}}</td>
+        <td>{{ c.custName }}</td>
+        <td>{{ c.custAge }}</td>
+        <td>{{ c.custSex }}</td>
+        <td>{{ c.custPhone }}</td>
+        <td>{{ c.totalNum() }}</td>
+        <td>{{ c.totalCost() }}</td>
+        <td>
+            <a class="btn btn-default btn-sm" type="button" href={{ url_for('reservation_page',id=c.id) }}>详情</a>
+            <a class="btn btn-default btn-sm" type="button" href={{ url_for('customer_delete',id=c.id) }}>删除</a>
+        </td>
+    {% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if userId > 1 %}
+<h3>个人信息中心</h3><hr>
+<table class="table" style="margin-top:10px" >
+<tr>
+    <th>个人编号</th>
+    <td>{{ customers.id }}</td>
+</tr>
+<tr>
+    <th>姓名</th>
+    <td>{{ customers.custName }}</td>
+</tr>
+<tr>
+    <th>性别</th>
+    <td>{{ customers.custSex }}</td>
+</tr>
+<tr>
+    <th>年龄</th>
+    <td>{{ customers.custAge }}</td>
+</tr>
+<tr>
+    <th>手机号</th>
+    <td>{{ customers.custPhone }}</td>
+</tr>
+<tr>
+    <th>地址</th>
+    <td>{{ customers.custAddr }}</td>
+</tr>
+<tr>
+    <th>总计预订</th>
+    <td>{{ customers.totalNum() }}</td>
+</tr>
+<tr>
+    <th>总计花费</th>
+    <td>{{ customers.totalCost() }}</td>
+</tr>
+<tr>
+    <td>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('customer_edit',id=customers.id) }}>编辑个人信息</a>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('logout') }}>注销</a>
+    </td>
+</tr>
+</table>
+{% endif %}
+
+{% endblock %}

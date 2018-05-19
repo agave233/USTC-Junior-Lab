@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block container %}
+  {% if userId == 1 %}
+    <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('ad_edit',id=0) }}>新的活动</a>
+  {% endif %}
+<div class="jumbotron">
+  <h3>欢迎来到旅行服务系统~为您推荐：</h3><br>
+{% for ad in ads %}
+    <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+            <img src="static/img/a{{ ad.id }}.jpg" alt="img">
+            <div class="caption">
+                <h3>{{ ad.adName }}</h3>
+                <p>{{ ad.adContent }}</p>
+                <p>{{ ad.endTime.strftime("%m-%d %H:%M") }}前
+                <h1 style="color: coral;display: inline;padding-right: 5px">￥{{ ad.adPrice }}</h1>
+                <p style="display: inline;">
+                    {% if userId == 1 %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('ad_edit',id=ad.id) }}>编辑</a>
+                        <a class="btn btn-default btn-sm" type="button" href={{ url_for('ad_delete',id=ad.id) }}>删除</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

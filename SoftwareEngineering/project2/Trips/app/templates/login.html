@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block container %}
+    <h3>用户登录</h3><hr>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    <div style="width:300px;">
+    <form action="{{ url_for('login') }}" method=post>
+        <dl>
+    		<div class="input-group">
+			    <span class="input-group-addon">用户名</span>
+			    <input type="text" name=username class="form-control" placeholder="username">
+		    </div>
+		    <br>
+    		<div class="input-group">
+			    <span class="input-group-addon"> 密码</span>
+			    <input type="password" name=password class="form-control" placeholder="passwd">
+		    </div>
+            <br>
+            <input class="btn btn-default" type="submit" value="登录">
+        </dl>
+  </form>
+    </div>
+
+{% endblock %}

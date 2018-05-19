@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block container %}
+<h3>景点门票预订中心</h3><hr>
+<div>
+  <form class="form-inline" method="get">
+      {% if userId == 1 %}
+        <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('attraction_edit',id=0) }}>新建</a>
+      {% endif %}
+      位置：
+      <input class="form-control" name="location" type="text" value="{{loc}}">
+      <input class="btn btn-default" type="submit" value="查询">
+  </form>
+</div>
+    <br>
+{% for a in attractions %}
+    <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+
+            <img src="static/img/attr{{ a.id }}.jpg" alt="img">
+            <div class="caption">
+                <h3>{{ a.attrName }}</h3>
+                <p>{{ a.attrLoca }}</p>
+                <p>{{ a.features }}</p>
+                {% if a.id in resvNums %}
+                    <h1 style="color: coral;display: inline;padding-right: 5px">￥{{ a.price }}</h1>
+                {% else %}
+                    <h1 style="color: coral;display: inline;padding-right: 30px">￥{{ a.price }}</h1>
+                {% endif %}
+                <p style="display: inline;">
+                {% if userId == 0 %}
+                    <a class="btn btn-primary btn-sm" type="button" disabled="disabled">预定</a>
+                {% endif %}
+                {% if userId > 1 %}
+                    {% if a.id in resvNums %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('reservation_add',type=3,id=a.id,add=0) }}>预订({{ resvNums[a.id] }})</a>
+                        <a class="btn btn-default btn-sm" type="button" href={{ url_for('reservation_add',type=3,id=a.id,add=2) }}>取消预订</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('reservation_add',type=3,id=a.id,add=0) }}>预订</a>
+                    {% endif %}
+                {% endif %}
+                {% if userId == 1 %}
+                    <a class="btn btn-primary btn-sm" type="button" href={{ url_for('attraction_edit',id=a.id) }}>编辑</a>
+                    <a class="btn btn-default btn-sm" type="button" href={{ url_for('attraction_delete',id=a.id) }}>删除</a>
+                {% endif %}
+
+                </p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{#</table>#}
+{% endblock %}

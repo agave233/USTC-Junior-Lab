@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block container %}
+<h3>火车票预订中心</h3><hr>
+<div>
+  <form class="form-inline" method="get">
+      {% if userId == 1 %}
+        <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('train_edit',id=0) }}>新建</a>
+      {% endif %}
+      从
+      <input class="form-control" name="from" type="text" value="{{fromCity}}">
+      到
+      <input class="form-control" name="to" type="text" value="{{toCity}}">
+      <input class="btn btn-default" type="submit" value="查询">
+  </form>
+</div><br>
+
+{% for t in trains %}
+    <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+
+{#            <img src="static/img/flight{{ a.id }}.jpg" alt="img">#}
+            <div class="caption">
+                <h4>{{ t.trainId }} —— {{ t.seatType }}({{ t.avaiNum }}/{{ t.seatNum }})</h4>
+                <h3>{{ t.fromCity }} => {{ t.arivCity }}</h3>
+                <p>{{ t.fromTime.strftime("%m-%d %H:%M") }} ~ {{ t.arivTime.strftime("%m-%d %H:%M") }}</p>
+                {% if t.id in resvNums %}
+                    <h2 style="color: coral;display: inline;padding-right: 5px">￥{{ t.price }}</h2>
+                {% else %}
+                    <h2 style="color: coral;display: inline;padding-right: 30px">￥{{ t.price }}</h2>
+                {% endif %}
+                <p style="display: inline;">
+                {% if userId == 0 %}
+                    <a class="btn btn-primary btn-sm" type="button" disabled="disabled">预定</a>
+                {% endif %}
+                {% if userId > 1 %}
+                    {% if t.id in resvNums %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('reservation_add',type=1,id=t.id,add=0) }}>预订({{ resvNums[t.id] }})</a>
+                        <a class="btn btn-default btn-sm" type="button" href={{ url_for('reservation_add',type=1,id=t.id,add=2) }}>取消</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm" type="button" href={{ url_for('reservation_add',type=1,id=t.id,add=0) }}>预订</a>
+                    {% endif %}
+                {% endif %}
+                {% if userId == 1 %}
+                    <a class="btn btn-primary btn-sm" type="button" href={{ url_for('train_edit',id=t.id) }}>编辑</a>
+                    <a class="btn btn-default btn-sm" type="button" href={{ url_for('train_delete',id=t.id) }}>删除</a>
+                {% endif %}
+
+                </p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{#</table>#}
+{% endblock %}
