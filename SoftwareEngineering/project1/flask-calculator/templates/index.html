@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='cs/style.css') }}" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='icon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+
+  <div class="box" id="0">
+
+    <div class="top">
+      <div class="screen col-md-2">
+        <div class="main-screen" contenteditable="true" tabindex="0" id="output">0</div>
+        <div class="sub-screen" id="output2"></div>
+      </div>
+      <div class="buttons col-md-2">
+        <button class="set-theme btn btn-success" >Theme</button>
+        <button class="show-hist btn btn-info" title="Past done"
+			data-container="body" data-toggle="popover" data-placement="bottom"
+			data-content="Null">History</button>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="buttons">
+        <button class="btn-clear btn btn-danger" id="clearButton">C</button>
+        <button class="btn btn-warning" onclick="window.open('https://github.com/agave233/flask-calculator')">Link</button>
+        <button class="btn-operate btn btn-primary" value="/">/</button>
+        <button class="btn-operate btn btn-primary" value="*">x</button>
+        <button class="btn-func btn btn-primary" value="<sup>{-1}</sup>" id=>X<sup>-1</sup></button>
+        <button class="btn-func btn btn-primary" value="<sup>{2}</sup>">X<sup>2</sup></button>
+      </div>
+
+      <div class="buttons">
+        <button class="nums btn btn-primary" value="(">(</button>
+        <button class="btn-operate btn btn-primary" value=")">)</button>
+        <button class="btn-operate btn btn-primary" value="%">mod</button>
+        <button class="btn-operate btn btn-primary" value="!">n!</button>
+        <button class="btn-func btn btn-primary" value="<sup>{1/2}</sup>">X<sup>1/2</sup></button>
+        <button class="btn-func-sup btn btn-primary" value="<sup>{?}</sup>">X<sup>y</sup></button>
+      </div>
+
+      <div class="buttons">
+        <button class="nums btn btn-primary" value="7">7</button>
+        <button class="nums btn btn-primary" value="8">8</button>
+        <button class="nums btn btn-primary" value="9">9</button>
+        <button class="btn-operate btn btn-primary" value="-">-</button>
+        <button class="btn-func btn btn-primary" value="abs">|X|</button>
+        <button class="btn-func btn btn-primary" value="tan">tan</button>
+      </div>
+
+      <div class="buttons">
+        <button class="nums btn btn-primary" value="4">4</button>
+        <button class="nums btn btn-primary" value="5">5</button>
+        <button class="nums btn btn-primary" value="6">6</button>
+        <button class="btn-operate btn btn-primary" value="+">+</button>
+        <button class="btn-func btn btn-primary" value="cos">cos</button>
+        <button class="btn-func btn btn-primary" value="sin">sin</button>
+      </div>
+
+      <div class="buttons">
+        <button class="nums btn btn-primary" value="1">1</button>
+        <button class="nums btn btn-primary" value="2">2</button>
+        <button class="nums btn btn-primary" value="3">3</button>
+        <button class="btn-func btn btn-primary" value="ln">ln</button>
+        <button class="btn-func btn btn-primary" value="log">log</button>
+        <button class="btn-equal btn btn-warning" id="resultButton">=</button>
+      </div>
+
+      <div class="buttons">
+        <button class="nums btn btn-primary" value="0">0</button>
+        <button class="nums btn btn-primary" value=".">.</button>
+        <button class="nums btn btn-primary" value="π">π</button>
+        <button class="nums btn btn-primary" value="e">e</button>
+        <button class="btn-func-sup btn btn-primary" value="e<sup>{?}</sup>">Exp</button>
+      </div>
+    </div>
+
+    <footer class="text-center">
+      Made by Lishuangli, Wangxin, ZhangPeining.
+    </footer>
+
+  </div>
+
+  <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script type="text/javascript">
+    var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
+</body>
+</html>
+
