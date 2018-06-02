@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+{% block container %}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h1>业务统计</h1>
+    </div>
+    <div class="panel-body">
+
+<div>
+  <form class="form-inline" method="get">
+      年份：
+      <input class="form-control " name="year" type="text" value="{{year}}">
+      <input class="btn btn-default" type="submit" value="查询">
+  </form>
+</div>
+{% if uns != 0 %}
+    <table class="table table-bordere" style="margin-top:10px">
+    <tr>
+        <th>支行名</th>
+        <th>用户数</th>
+        <th>存款业务金额</th>
+        <th>取款业务金额</th>
+        <th>放贷业务金额</th>
+        <th>还款业务金额</th>
+        <th></th>
+    </tr>
+    {% for b in bs %}
+    <tr class="info">
+        <td>{{ b.branchName }}</td>
+        <td>{{ uns[b.id] }}</td>
+        <td>{{ mi1[b.id] }}</td>
+        <td>{{ mo1[b.id] }}</td>
+        <td>{{ mo2[b.id] }}</td>
+        <td>{{ mi2[b.id] }}</td>
+        <td>
+            <a class="btn btn-success btn-sm" type="buttoon" href={{ url_for('census_page',id=b.id) }}>统计详情</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <br>
+    <div id="main1" style="width: 800px;height:500px;margin: 0 auto;"></div>
+    <div id="main2" style="width: 800px;height:500px;margin: 0 auto;"></div>
+    <div id="main3" style="width: 800px;height:500px;margin: 0 auto;"></div>
+    <div id="main4" style="width: 800px;height:500px;margin: 0 auto;"></div>
+    <div id="main5" style="width: 800px;height:500px;margin: 0 auto;"></div>
+    <script src="{{ url_for('static', filename='echarts.min.js') }}"></script>
+    <script type="text/javascript">
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        var myChart2 = echarts.init(document.getElementById('main2'));
+        var myChart3 = echarts.init(document.getElementById('main3'));
+        var myChart4 = echarts.init(document.getElementById('main4'));
+        var myChart5 = echarts.init(document.getElementById('main5'));
+
+
+        var bName = {{ bs.branchName|tojson}};
+        var year = {{year}};
+        var mi1 = {{ mi1 }};
+        var mi2 = {{ mi2 }};
+        var mo1 = {{ mo1 }};
+        var mo2 = {{ mo2 }};
+
+        var   option1 = {
+                title : {
+                    text: bName + '业务统计',
+                    subtext: year + '年'
+                },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['存款业务金额','取款业务金额','放贷业务金额','还款业务金额']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    axisLabel : {
+                        formatter: '￥{value}'
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'存款业务金额',
+                    type:'line',
+                    data:mi1,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'取款业务金额',
+                    type:'line',
+                    data:mo1,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'放贷业务金额',
+                    type:'line',
+                    data:mo2,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'还款业务金额',
+                    type:'line',
+                    data:mi2,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name : '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+
+        var option2 = {
+            title : {
+                text: bName + '存款业务年度汇总（按季）',
+                subtext: year + '年',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:['第一季度','第二季度','第三季度','第四季度']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel'],
+                        option: {
+                            funnel: {
+                                x: '25%',
+                                width: '50%',
+                                funnelAlign: 'left',
+                                max: 1548
+                            }
+                        }
+                    },
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:mi1[0] + mi1[1] + mi1[2], name:'第一季度'},
+                        {value:mi1[3] + mi1[4] + mi1[5], name:'第二季度'},
+                        {value:mi1[6] + mi1[7] + mi1[8], name:'第三季度'},
+                        {value:mi1[9] + mi1[10] + mi1[11], name:'第四季度'}
+                    ]
+                }
+            ]
+        };
+
+        var option3 = {
+            title : {
+                text: bName + '放贷业务年度汇总（按季）',
+                subtext: year + '年',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:['第一季度','第二季度','第三季度','第四季度']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel'],
+                        option: {
+                            funnel: {
+                                x: '25%',
+                                width: '50%',
+                                funnelAlign: 'left',
+                                max: 1548
+                            }
+                        }
+                    },
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:mo2[0] + mo2[1] + mo2[2], name:'第一季度'},
+                        {value:mo2[3] + mo2[4] + mo2[5], name:'第二季度'},
+                        {value:mo2[6] + mo2[7] + mo2[8], name:'第三季度'},
+                        {value:mo2[9] + mo2[10] + mo2[11], name:'第四季度'}
+                    ]
+                }
+            ]
+        };
+
+        var option4 = {
+            title : {
+                text: bName + '取款业务年度汇总（按季）',
+                subtext: year + '年',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:['第一季度','第二季度','第三季度','第四季度']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel'],
+                        option: {
+                            funnel: {
+                                x: '25%',
+                                width: '50%',
+                                funnelAlign: 'left',
+                                max: 1548
+                            }
+                        }
+                    },
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:mo1[0] + mo1[1] + mo1[2], name:'第一季度'},
+                        {value:mo1[3] + mo1[4] + mo1[5], name:'第二季度'},
+                        {value:mo1[6] + mo1[7] + mo1[8], name:'第三季度'},
+                        {value:mo1[9] + mo1[10] + mo1[11], name:'第四季度'}
+                    ]
+                }
+            ]
+        };
+
+        var option5 = {
+            title : {
+                text: bName + '还款业务年度汇总（按季）',
+                subtext: year + '年',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:['第一季度','第二季度','第三季度','第四季度']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel'],
+                        option: {
+                            funnel: {
+                                x: '25%',
+                                width: '50%',
+                                funnelAlign: 'left',
+                                max: 1548
+                            }
+                        }
+                    },
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'访问来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:mi2[0] + mi2[1] + mi2[2], name:'第一季度'},
+                        {value:mi2[3] + mi2[4] + mi2[5], name:'第二季度'},
+                        {value:mi2[6] + mi2[7] + mi2[8], name:'第三季度'},
+                        {value:mi2[9] + mi2[10] + mi2[11], name:'第四季度'}
+                    ]
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+        myChart3.setOption(option3);
+        myChart2.setOption(option2);
+        myChart4.setOption(option4);
+        myChart5.setOption(option5);
+
+    </script>
+
+{% endif %}
+
+{% endblock %}
+    </div>
+</div>

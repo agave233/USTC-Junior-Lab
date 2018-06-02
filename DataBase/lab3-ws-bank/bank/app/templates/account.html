@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h1>账户管理</h1>
+    </div>
+    <div class="panel-body">
+
+<div>
+  <form class="form-inline" method="get">
+      <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('account_edit',id=0,atype=2) }}>新建</a>
+      账户客户姓名：
+      <input class="form-control " name="userName" type="text" value="{{account_dict['userName']}}">
+      <input class="btn btn-default" type="submit" value="查询">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal1"> 高级搜索 </button>
+  </form>
+</div>
+<table class="table table-bordere" style="margin-top:10px">
+<tr>
+    <th>账户号</th>
+    <th>账户类型</th>
+    <th>发放支行</th>
+    <th>负责员工姓名</th>
+    <th>账户余额</th>
+    <th>利率</th>
+    <th>货币类型</th>
+    <th>透支额</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+</tr>
+{% for da in das %}
+<tr class="info">
+    <td>{{ da.accountId }}</td>
+    <th>储蓄账户</th>
+    <td>{{ bnames_da[da.id] }}</td>
+    <td>{{ snames_da[da.id] }}</td>
+    <td>{{ da.balance }}</td>
+    <td>{{ da.depoRate }}</td>
+    <td>{{ da.depoType }}</td>
+    <td>-</td>
+    <td>
+        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title={{ unames_da[da.id] }}>全部客户</button>
+        <script>
+            $(function () { $("[data-toggle='tooltip']").tooltip(); });
+        </script>
+    </td>
+    <td>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal2" onclick="values(0, {{ da.id }})"> 增加客户 </button>
+
+        <script type="text/javascript">
+            $(function(){
+                $('#myModal2').modal("hide");
+            });
+            function values(type, ID){
+                    $('#aid').val(String(type) + String(ID));
+
+            }
+        </script>
+    </td>
+    <td>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('account_op',id=da.id,atype=0) }}>存取款</a>
+    </td>
+    <td>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('account_edit',id=da.id,atype=0) }}>编辑</a>
+        <a class="btn btn-danger btn-sm" type="button" href={{ url_for('account_delete',id=da.id,atype=0) }}>删除</a>
+    </td>
+</tr>
+{% endfor %}
+
+{% for ca in cas %}
+<tr class="info">
+    <td>{{ ca.accountId }}</td>
+    <th>支票账户</th>
+    <td>{{ bnames_ca[ca.id] }}</td>
+    <td>{{ snames_ca[ca.id] }}</td>
+    <td>{{ ca.balance }}</td>
+    <td>-</td>
+    <td>-</td>
+    <td>{{ ca.checkLimit }}</td>
+    <td>
+        <a type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title={{ unames_ca[ca.id] }}>全部客户</a>
+        <script>
+            $(function () { $("[data-toggle='tooltip']").tooltip(); });
+        </script>
+    </td>
+    <td>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal2" onclick="values(1, {{ ca.id }})"> 增加客户 </button>
+
+        <script type="text/javascript">
+            $(function(){
+                $('#myModal2').modal("hide");
+            });
+            function values(type, ID){
+                    $('#aid').val(String(type) + String(ID));
+            }
+        </script>
+    </td>
+    <td>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('account_op',id=ca.id,atype=1) }}>存取款</a>
+    </td>
+    <td>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('account_edit',id=ca.id,atype=1) }}>编辑</a>
+        <a class="btn btn-danger btn-sm" type="button" href={{ url_for('account_delete',id=ca.id,atype=1) }}>删除</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel1" align="center">高级搜索</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">账户号</span>
+                            <input class="form-control " name="accountId" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='6' type="text" value="{{account_dict['accountId']}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">发放支行名</span>
+                            <input class="form-control" name="branchName" type="text" value="{{account_dict['branchName']}}"><br>
+                        </div><br>
+                          <div class="input-group input-group-lg">
+                            <span class="input-group-addon">负责员工名</span>
+                            <input class="form-control" name="staffName" type="text" value="{{account_dict['staffName']}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户姓名</span>
+                            <input class="form-control" name="userName" type="text" value="{{account_dict['userName']}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">最小余额</span>
+                            <input class="form-control " name="balance" onkeyup="value=value.replace(/[^\d]/g,'')" type="text" value="{{account_dict['balance']}}">
+                        </div><br>
+
+                        <div class="radio">
+                            <label><input type="radio" name="accountType" id="accountType0" value="all" checked> all </label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="accountType" id="accountType1" value="depo"> 储蓄账户</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="accountType" id="accountType2" value="check"> 支票账户</label>
+                        </div>
+
+                        <input class="btn btn-default" type="submit" value="查询">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel2" align="center">增加客户</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <input type='hidden' id='aid' name='aid' value=''>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户身份证</span>
+                            <input class="form-control " name="Id" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='18' type="text" value="{{Id}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户姓名</span>
+                            <input class="form-control" name="Name" type="text" value="{{Name}}"><br>
+                        </div><br>
+                        <input class="btn btn-default" type="submit" value="增加客户到该账户">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+
+{% endblock %}
+    </div>
+</div>

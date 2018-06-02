@@ -1,0 +1,41 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as util %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
+
+{% block title %}银行管理系统{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">首页</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/branch">支行管理</a></li>
+        <li><a href="/staff">员工管理</a></li>
+        <li><a href="/user">客户管理</a></li>
+        <li><a href="/account">账户管理</a></li>
+        <li><a href="/loan">贷款管理</a></li>
+        <li><a href="/census/0">统计分析</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+{{util.flashed_messages(dismissible=True)}}
+<div class="container">
+  {% block container %}{% endblock %}
+</div>
+{% endblock %}

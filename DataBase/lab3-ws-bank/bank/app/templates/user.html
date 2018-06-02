@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h1>客户管理</h1>
+    </div>
+    <div class="panel-body">
+
+<div>
+  <form class="form-inline" method="get">
+      <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('user_edit',id=0) }}>新建</a>
+      客户姓名：
+      <input class="form-control " name="name" type="text" value="{{name}}">
+      <input class="btn btn-default" type="submit" value="查询">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"> 高级搜索 </button>
+  </form>
+</div>
+<table class="table table-bordere" style="margin-top:10px">
+<tr>
+    <th>客户身份证</th>
+    <th>客户姓名</th>
+    <th>客户手机号</th>
+    <th>客户地址</th>
+    <th>联系人姓名</th>
+    <th>与客户关系</th>
+    <th>联系人手机号</th>
+    <th>联系人邮箱</th>
+    <th></th>
+</tr>
+{% for u in users %}
+<tr class="info">
+    <td>{{ u.userId }}</td>
+    <td>{{ u.userName }}</td>
+    <td>{{ u.userPhone }}</td>
+    <td>{{ u.userAddr }}</td>
+    <td>{{ u.linkName }}</td>
+    <td>{{ u.linkRelation }}</td>
+    <td>{{ u.linkPhone }}</td>
+    <td>{{ u.linkMail }}</td>
+    <td>
+        <a class="btn btn-success btn-sm" type="buttoon" href={{ url_for('user_edit',id=u.id) }}>编辑</a>
+        <a class="btn btn-danger btn-sm" type="button" href={{ url_for('user_delete',id=u.id) }}>删除</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel" align="center">高级搜索</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户姓名</span>
+                            <input class="form-control " name="name" type="text" value="{{name}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户身份证号</span>
+                            <input class="form-control" name="idCard" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='18' type="text" value="{{idCard}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">联系人姓名</span>
+                            <input class="form-control " name="linkName" type="text" value="{{linkName}}">
+                        </div><br>
+                        <input class="btn btn-default" type="submit" value="查询">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+{% endblock %}
+    </div>
+</div>

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h1>贷款管理</h1>
+    </div>
+    <div class="panel-body">
+
+<div>
+  <form class="form-inline" method="get">
+      <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('loan_edit',id=0) }}>新建</a>
+      借贷客户姓名：
+      <input class="form-control " name="userName" type="text" value="{{loan_dict['userName']}}">
+      <input class="btn btn-default" type="submit" value="查询">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal1"> 高级搜索 </button>
+  </form>
+</div>
+<table class="table table-bordere" style="margin-top:10px">
+<tr>
+    <th>贷款号</th>
+    <th>发放支行</th>
+    <th>负责员工姓名</th>
+    <th>贷款金额</th>
+    <th>还款金额</th>
+    <th>发放状态</th>
+    <th></th>
+</tr>
+{% for l in loans %}
+<tr class="info">
+    <td>{{ l.loanId }}</td>
+    <td>{{ bnames[l.id] }}</td>
+    <td>{{ snames[l.id] }}</td>
+    <td>{{ l.loanMoney }}</td>
+    <td>{{ l.payMoney }}</td>
+    <td>{{ l.loanStatus }}</td>
+    <td>
+        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title={{ unames[l.id] }}>全部客户</button>
+        <script>
+            $(function () { $("[data-toggle='tooltip']").tooltip(); });
+        </script>
+        <a class="btn btn-default btn-sm" type="button" href={{ url_for('loan_pay',id=l.id) }}>还款详情</a>
+    </td>
+    <td>
+        {% if l.loanStatus == '未开始发放' %}
+            <a class="btn btn-success btn-sm" type="button" href={{ url_for('loan_status',id=l.id) }}>发放贷款</a>
+        {% elif l.loanStatus == '发放中' %}
+            <a class="btn btn-success btn-sm" type="button" href={{ url_for('loan_status',id=l.id) }}>发放完成</a>
+        {% else %}
+            <a class="btn btn-success btn-sm" type="button" disabled="disabled">发放完成</a>
+        {% endif %}
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal2" onclick="values({{l.id}})"> 增加客户 </button>
+
+        <script type="text/javascript">
+            $(function(){
+                $('#myModal2').modal("hide");
+            });
+            function values(ID){
+                    $('#lid').val(ID);
+            }
+        </script>
+
+        <a class="btn btn-danger btn-sm" type="button" href={{ url_for('loan_delete',id=l.id) }}>删除</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel1" align="center">高级搜索</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">贷款号</span>
+                            <input class="form-control " name="loanId" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='6' type="text" value="{{loan_dict['loanId']}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">发放支行名</span>
+                            <input class="form-control" name="branchName" type="text" value="{{loan_dict['branchName']}}"><br>
+                        </div><br>
+                          <div class="input-group input-group-lg">
+                            <span class="input-group-addon">负责员工名</span>
+                            <input class="form-control" name="staffName" type="text" value="{{loan_dict['staffName']}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">借贷人姓名</span>
+                            <input class="form-control" name="userName" type="text" value="{{loan_dict['userName']}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">最小贷款额</span>
+                            <input class="form-control " name="loanMoney" onkeyup="value=value.replace(/[^\d]/g,'')" type="text" value="{{loan_dict['loanMoney']}}">
+                        </div><br>
+
+                        <div class="radio">
+                            <label><input type="radio" name="loanStatus" id="loanStatus0" value="all" checked> all </label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="loanStatus" id="loanStatus1" value="未开始发放"> 未开始发放</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="loanStatus" id="loanStatus2" value="发放中"> 发放中</label>
+                        </div>
+                        <div class="radio">
+                            <label> <input type="radio" name="loanStatus" id="loanStatus3" value="已全部发放"> 已全部发放</label>
+                        </div>
+
+                        <input class="btn btn-default" type="submit" value="查询">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel2" align="center">增加客户</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <input type='hidden' id='lid' name='lid' value=''>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户身份证</span>
+                            <input class="form-control " name="Id" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='18' type="text" value="{{Id}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">客户姓名</span>
+                            <input class="form-control" name="Name" type="text" value="{{Name}}"><br>
+                        </div><br>
+                        <input class="btn btn-default" type="submit" value="增加到该贷款项">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+
+{% endblock %}
+    </div>
+</div>

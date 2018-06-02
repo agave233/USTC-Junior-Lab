@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h1>员工管理</h1>
+    </div>
+    <div class="panel-body">
+
+<div>
+  <form class="form-inline" method="get">
+      <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('staff_edit',id=0) }}>新建</a>
+      员工姓名：
+      <input class="form-control " name="name" type="text" value="{{name}}">
+      <input class="btn btn-default" type="submit" value="查询">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"> 高级搜索 </button>
+  </form>
+</div>
+<table class="table table-bordere" style="margin-top:10px">
+<tr>
+    <th>身份证</th>
+    <th>姓名</th>
+    <th>所在支行</th>
+    <th>入职时间</th>
+    <th>手机号</th>
+    <th>地址</th>
+    <th>经理身份证</th>
+    <th></th>
+</tr>
+{% for s in staffs %}
+<tr class="info">
+    <td>{{ s.staffId }}</td>
+    <td>{{ s.staffName }}</td>
+    <td>{{ bnames[s.branchId] }}</td>
+    <td>{{ s.EnterTime }}</td>
+    <td>{{ s.staffPhone }}</td>
+    <td>{{ s.staffAddr }}</td>
+    <td>{{ s.managerId }}</td>
+    <td>
+        <a class="btn btn-success btn-sm" type="buttoon" href={{ url_for('staff_edit',id=s.id) }}>编辑</a>
+        <a class="btn btn-danger btn-sm" type="button" href={{ url_for('staff_delete',id=s.id) }}>删除</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel" align="center">高级搜索</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">员工姓名</span>
+                            <input class="form-control " name="name" type="text" value="{{name}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">身份证号</span>
+                            <input class="form-control" name="idCard" onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='18' type="text" value="{{idCard}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">所在支行</span>
+                            <input class="form-control " name="branchName" type="text" value="{{branchName}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">经理身份证</span>
+                            <input class="form-control " onkeyup="value=value.replace(/[^\d]/g,'')" maxlength='18' name="managerId" type="text" value="{{managerId}}">
+                        </div><br>
+                        <input class="btn btn-default" type="submit" value="查询">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+{% endblock %}
+    </div>
+</div>

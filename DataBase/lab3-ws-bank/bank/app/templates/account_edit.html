@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block container %}
+    {% if accountType == '1' %}
+        <h3>账户新建</h3><hr>
+    {% else %}
+        <h3>账户编辑</h3><hr>
+    {% endif %}
+    <div style="width:300px;">
+    <form action="{{ url_for('account_edit', id=aid, atype=atype) }}" method=post>
+        <dl>
+            {% if accountType == '2' %}
+                <div class="input-group">
+                    <span class="input-group-addon">开户支行</span>
+                    <input type="text" name=branchName class="form-control"">
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <span class="input-group-addon">负责员工姓名</span>
+                    <input type="text" name=staffName class="form-control"">
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <span class="input-group-addon">客户姓名</span>
+                    <input type="text" name=userName class="form-control"">
+                </div>
+                <br>
+            {% endif %}
+
+
+            {% if accountType == '0' or accountType == '2' %}
+                <div class="input-group">
+                    <span class="input-group-addon">利率</span>
+                    <input type="text" name=depoRate class="form-control">
+                </div>
+                <br>
+                <div class="input-group">
+                    <span class="input-group-addon">货币类型</span>
+                    <input type="text" name=depoType class="form-control">
+                </div>
+                <br>
+            {% endif %}
+            {% if accountType == '1' or accountType == '2' %}
+                <div class="input-group">
+                    <span class="input-group-addon">透支额</span>
+                    <input type="text" name=checkLimit class="form-control">
+                </div>
+                <br>
+            {% endif %}
+
+            {% if accountType == '2' %}
+                <div class="input-group">
+                    <span class="input-group-addon">账户类型</span>
+                    <div class="radio">
+                        <label><input type="radio" name="accountType" id="type0" value="0" checked="checked"> 储蓄账户 </label>
+                        <label><input type="radio" name="accountType" id="type1" value="1"> 支票账户</label>
+                    </div>
+                </div>
+                <br>
+            {% else %}
+                <input type='hidden' id='accountType' name='accountType' value={{ accountType }}>
+            {% endif %}
+
+            <input class="btn btn-default" type="submit" value="提交">
+        </dl>
+  </form>
+    </div>
+
+{% endblock %}

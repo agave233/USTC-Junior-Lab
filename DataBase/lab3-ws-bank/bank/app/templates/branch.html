@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h1>支行管理</h1>
+    </div>
+    <div class="panel-body">
+
+<div>
+  <form class="form-inline" method="get">
+      <a class="btn btn-default" style="margin-right:50px" type="button" href={{ url_for('branch_edit',id=0) }}>新建</a>
+      支行名：
+      <input class="form-control " name="name" type="text" value="{{name}}">
+      <input class="btn btn-default" type="submit" value="查询">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"> 高级搜索 </button>
+  </form>
+</div>
+<table class="table table-bordere" style="margin-top:10px">
+<tr>
+    <th>支行名</th>
+    <th>城市</th>
+    <th>资产</th>
+    <th></th>
+</tr>
+{% for b in branches %}
+<tr class="info">
+    <td>{{ b.branchName }}</td>
+    <td>{{ b.branchCity }}</td>
+    <td>{{ b.branchAsset }}</td>
+    <td>
+        <a class="btn btn-success btn-sm" type="buttoon" href={{ url_for('branch_edit',id=b.id) }}>编辑</a>
+        <a class="btn btn-danger btn-sm" type="button" href={{ url_for('branch_delete',id=b.id) }}>删除</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog"> <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel" align="center">高级搜索</h4>
+      </div>
+
+      <div class="modal-body">
+                <div style="padding: 10px 100px 10px;">
+                    <form class="bs-example bs-example-form" role="form">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">支行名</span>
+                            <input class="form-control " name="name" type="text" value="{{name}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">城 市</span>
+                            <input class="form-control" name="city" type="text" value="{{city}}"><br>
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">最小资产</span>
+                            <input class="form-control " name="minAsset" onkeyup="value=value.replace(/[^\d]/g,'')" type="text" value="{{minAsset}}">
+                        </div><br>
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-addon">最大资产</span>
+                            <input class="form-control " onkeyup="value=value.replace(/[^\d]/g,'')" name="maxAsset" type="text" value="{{maxAsset}}">
+                        </div><br>
+                        <input class="btn btn-default" type="submit" value="查询">
+                    </form>
+                </div>
+        </div>
+      </div></div> <!-- modal body -->
+</div>
+{% endblock %}
+    </div>
+</div>

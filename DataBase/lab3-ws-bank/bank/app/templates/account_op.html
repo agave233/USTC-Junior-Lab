@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block container %}
+    <h3>账户存取款操作</h3><hr>
+    <div style="width:300px;">
+    <form action="{{ url_for('account_op', id=id, atype=atype) }}" method=post>
+        <dl>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">金额</span>
+                <input class="form-control " name="money" onkeyup="value=value.replace(/[^\d]/g,'')" type="text">
+            </div><br>
+            <div class="radio">
+                <label><input type="radio" name="add" id="add0" value="1" checked> 存款</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="add" id="add1" value="-1"> 取款</label>
+            </div>
+            <br>
+            <input class="btn btn-default" type="submit" value="提交">
+        </dl>
+  </form>
+    </div>
+
+{% endblock %}
